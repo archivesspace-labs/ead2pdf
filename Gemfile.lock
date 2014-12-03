@@ -22,5 +22,6 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  jruby-jars
   saxon-xslt
   warbler!

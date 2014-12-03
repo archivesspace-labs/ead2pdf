@@ -1,10 +1,11 @@
 require 'java'
-require 'saxon-xslt'
 require 'stringio'
 
 Dir.glob("#{File.expand_path(File.dirname(__FILE__))}/../lib/*.jar").each do |jar|
   require jar
 end
+
+require 'saxon-xslt'
 
 java_import Java::org::apache::fop::apps::FopFactory
 java_import Java::org::apache::fop::apps::Fop
