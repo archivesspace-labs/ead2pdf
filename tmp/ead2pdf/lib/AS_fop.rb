@@ -1,1 +1,0 @@
-load __FILE__.sub(/.rb$/, '.class')
