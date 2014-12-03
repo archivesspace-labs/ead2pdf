@@ -1,0 +1,1 @@
+load 'ead2pdf/bin/ead2pdf-main.rb'

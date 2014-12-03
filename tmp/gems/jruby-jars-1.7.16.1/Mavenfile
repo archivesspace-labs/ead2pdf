@@ -1,0 +1,55 @@
+#-*- mode: ruby -*-
+gemspec
+
+ruby_version = model.version
+
+inherit "org.jruby:jruby-artifacts:#{ruby_version.sub( /.dev$/, '-SNAPSHOT' )}"
+
+model.version = nil
+
+name "JRuby Jars Gem"
+
+jar 'org.jruby:jruby-core-complete', '${project.parent.version}'
+jar 'org.jruby:jruby-stdlib-complete', '${project.parent.version}'
+
+plugin( :clean, '2.5' ) do
+  execute_goals( :clean,
+                 :phase => :clean, 
+                 :id => 'clean-lib',
+                 :filesets => [ { :directory => '${basedir}/lib',
+                                  :includes => ['*.jar'] } ],
+                 :failOnError => false )
+end
+
+properties( 'tesla.dump.pom' => 'pom.xml',
+            'tesla.dump.readOnly' => true,
+            'jruby.home' => '${basedir}/../../' )
+
+jruby_plugin!( :gem,
+               :gemspec => 'jruby-jars.gemspec',
+               :includeDependencies => true ) do
+  execute_goals :id => 'default-push', :skip => true
+end
+
+build do
+  final_name "${project.artifactId}-#{ruby_version}"
+end
+
+# TODO remove once gem-maven-plugin honors the final_name
+plugin :install, :skip => true
+execute 'rename gem file', :verify do |ctx|
+  require 'fileutils'
+  FileUtils.rm_rf(Dir["#{ctx.project.build.directory}/*.gem"])
+  FileUtils.mv(Dir["#{ctx.project.basedir}/*.gem"], ctx.project.build.directory)
+end
+
+plugin( :invoker,
+        :projectsDirectory => 'src/it',
+        :cloneProjectsTo => '${project.build.directory}/it',
+        :postBuildHookScript => 'verify.bsh',
+        :streamLogs => true ) do
+  execute_goals( :install, :run )
+#  :settingsFile => '${basedir}/src/it/settings.xml', 
+#  :localRepositoryPath => '${project.build.directory}/local-repo' )
+end
+# vim: syntax=Ruby
