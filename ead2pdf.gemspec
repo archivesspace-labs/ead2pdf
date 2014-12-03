@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name             = 'ead2pdf'
-  s.version          = '1.0.0'
+  s.version          = '0.0.2'
 
   s.authors          = ['Chris Fitzpatrick']
   s.date             = '2014-12-02'
