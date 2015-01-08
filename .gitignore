@@ -1,0 +1,10 @@
+.DS_Store
+*.xml
+*.jar
+*.pdf
+*.war
+build/gems
+*.swp
+.idea
+*.jasper
+.bundle
