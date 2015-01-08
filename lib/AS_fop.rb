@@ -30,8 +30,8 @@ class ASFop
    @source = source 
    @xml = IO.read(source)
    @output = output.nil? ? "#{source}.pdf" : output 
-   
-   @xslt = File.read( xslt, system_id: File.join( File.dirname(__FILE__), '../lib' ,'as-ead-pdf.xsl') )
+   file =File.join( File.dirname(__FILE__), '../lib' ,'as-ead-pdf.xsl').gsub("\\", "/" )   
+   @xslt = File.read( xslt, system_id: file )
    # WHAT A HACK! but you can't pass in a URI as a variable? jeezus.  
    # @xslt.gsub!('<xsl:include href="as-helper-functions.xsl"/>', "<xsl:include href='#{File.join(File.dirname(__FILE__), '../lib', 'as-helper-functions.xsl')}'/>" ) 
   end
