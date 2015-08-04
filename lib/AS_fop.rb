@@ -34,11 +34,14 @@ class ASFop
    @file = xslt
    
    if xslt.nil?
-    @file =File.join( File.dirname(__FILE__) ,'as-ead-pdf.xsl').gsub("\\", "/" )   
+    @file =File.join( File.dirname(__FILE__) ,'as-ead-pdf.xsl').gsub("\\", "/" ) 
     @xslt = File.read( file, system_id: @file )
    else
     @xslt = File.read( xslt ) 
    end
+
+   @file = "jar:file:" + file if @file =~ /\.jar!/
+   puts @file
   
   end
 
