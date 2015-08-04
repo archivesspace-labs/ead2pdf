@@ -22,6 +22,7 @@ class ASFop
 
   attr_accessor :source
   attr_accessor :xslt
+  attr_accessor :file
 
   def initialize(source, output= nil,  xslt = nil )
    abort("#{source} not found") unless File.exists?(source) 
@@ -30,11 +31,12 @@ class ASFop
    @source = source 
    @xml = IO.read(source)
    @output = output.nil? ? "#{source}.pdf" : output 
+   @file = xslt
    
    if xslt.nil?
-    file =File.join( File.dirname(__FILE__), '../lib' ,'as-ead-pdf.xsl').gsub("\\", "/" )   
-    @xslt = File.read( file, system_id: file )
-   else 
+    @file =File.join( File.dirname(__FILE__) ,'as-ead-pdf.xsl').gsub("\\", "/" )   
+    @xslt = File.read( file, system_id: @file )
+   else
     @xslt = File.read( xslt ) 
    end
   
@@ -42,7 +44,7 @@ class ASFop
 
 
   def to_fo
-    transformer = Saxon.XSLT(@xslt)
+    transformer = Saxon.XSLT(@xslt, system_id: @file )
     transformer.transform(Saxon.XML(@xml)).to_s
   end
 
