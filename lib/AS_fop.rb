@@ -23,17 +23,21 @@ class ASFop
   attr_accessor :source
   attr_accessor :xslt
 
-  def initialize(source, output= nil,  xslt = File.join( File.dirname(__FILE__), '../lib' ,'as-ead-pdf.xsl')  )
-    abort("#{source} not found") unless File.exists?(source) 
+  def initialize(source, output= nil,  xslt = nil )
+   abort("#{source} not found") unless File.exists?(source) 
     puts source
     puts output
    @source = source 
    @xml = IO.read(source)
    @output = output.nil? ? "#{source}.pdf" : output 
-   file =File.join( File.dirname(__FILE__), '../lib' ,'as-ead-pdf.xsl').gsub("\\", "/" )   
-   @xslt = File.read( xslt, system_id: file )
-   # WHAT A HACK! but you can't pass in a URI as a variable? jeezus.  
-   # @xslt.gsub!('<xsl:include href="as-helper-functions.xsl"/>', "<xsl:include href='#{File.join(File.dirname(__FILE__), '../lib', 'as-helper-functions.xsl')}'/>" ) 
+   
+   if xslt.nil?
+    file =File.join( File.dirname(__FILE__), '../lib' ,'as-ead-pdf.xsl').gsub("\\", "/" )   
+    @xslt = File.read( file, system_id: file )
+   else 
+    @xslt = File.read( xslt ) 
+   end
+  
   end
 
 
