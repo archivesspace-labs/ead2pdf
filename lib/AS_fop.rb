@@ -26,8 +26,8 @@ class ASFop
 
   def initialize(source, output= nil,  xslt = nil )
    abort("#{source} not found") unless File.exists?(source) 
-    puts source
-    puts output
+    puts "source XML=#{source}"
+    puts "output=#{output}"
    @source = source 
    @xml = IO.read(source)
    @output = output.nil? ? "#{source}.pdf" : output 
@@ -40,7 +40,7 @@ class ASFop
     @xslt = File.read( xslt ) 
    end
 
-   @file = "jar:file:" + file if @file =~ /\.jar!/
+   @file = "jar:file:" + file if @file =~ /\.jar!/  # it seems to need this prefix to resolve from jarfile
    puts "xsl=#{@file}"
   
   end
@@ -59,7 +59,7 @@ class ASFop
       fopfac = FopFactory.newInstance
       baseurl=File.dirname(File.dirname(@file))
       puts "BaseURL=#{baseurl}"
-      fopfac.setBaseURL( baseurl )
+      fopfac.setBaseURL( baseurl ) # Need to set BaseURL to resolve images from jarfile
       fop = fopfac.newFop(MimeConstants::MIME_PDF, out.to_outputstream)
       
       transformer = TransformerFactory.newInstance.newTransformer()
