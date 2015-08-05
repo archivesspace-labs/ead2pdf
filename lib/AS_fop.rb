@@ -41,7 +41,7 @@ class ASFop
    end
 
    @file = "jar:file:" + file if @file =~ /\.jar!/
-   puts @file
+   puts "xsl=#{@file}"
   
   end
 
@@ -55,8 +55,12 @@ class ASFop
     begin 
       fo = StringIO.new(to_fo).to_inputstream  
       
-      out = File.new(@output, 'w') 
-      fop = FopFactory.newInstance.newFop(MimeConstants::MIME_PDF, out.to_outputstream)
+      out = File.new(@output, 'w')
+      fopfac = FopFactory.newInstance
+      baseurl=File.dirname(File.dirname(@file))
+      puts "BaseURL=#{baseurl}"
+      fopfac.setBaseURL( baseurl )
+      fop = fopfac.newFop(MimeConstants::MIME_PDF, out.to_outputstream)
       
       transformer = TransformerFactory.newInstance.newTransformer()
       res = SAXResult.new(fop.getDefaultHandler)
