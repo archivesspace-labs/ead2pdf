@@ -21,7 +21,7 @@
     <xsl:output method="xml" encoding="utf-8" indent="yes"/>
     
     <!-- Calls a stylesheet with local functions and lookup lists for languages and subject authorities -->
-    <xsl:include href="./lib/as-helper-functions.xsl"/>  
+    <xsl:include href="as-helper-functions.xsl"/>  
     
     <xsl:strip-space elements="*"/>
    
